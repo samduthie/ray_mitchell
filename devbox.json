@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/main/.schema/devbox.schema.json",
+  "packages": ["nodejs@22"],
+  "shell": {
+    "init_hook": [
+      "npm install --silent 2>/dev/null || true"
+    ],
+    "scripts": {
+      "dev": "npm run dev",
+      "build": "npm run build",
+      "preview": "npm run preview"
+    }
+  }
+}
