@@ -1,5 +1,29 @@
 import { initChatWidget } from './chat-widget'
 
+function initMobileNav(): void {
+  const toggle = document.getElementById('nav-toggle')
+  const nav = document.getElementById('site-nav')
+  if (!toggle || !nav) return
+
+  const setOpen = (open: boolean) => {
+    nav.classList.toggle('is-open', open)
+    toggle.setAttribute('aria-expanded', String(open))
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
+  }
+
+  toggle.addEventListener('click', () => {
+    setOpen(!nav.classList.contains('is-open'))
+  })
+
+  nav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false))
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false)
+  })
+}
+
 function initSmoothScroll(): void {
   document.querySelectorAll<HTMLAnchorElement>('a[href*="#"]').forEach((link) => {
     link.addEventListener('click', (e) => {
@@ -33,38 +57,21 @@ function initServicesHashScroll(): void {
   })
 }
 
-function initMotionEnter(): void {
-  const motionIds = [
-    'comp-j6w6mgxq',
-    'comp-j6w888ep',
-    'comp-j6w6mgy4',
-    'comp-mfo1u4y8',
-  ]
-
-  motionIds.forEach((id) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    el.addEventListener('animationend', () => {
-      el.dataset.motionEnter = 'done'
-    })
-  })
-}
-
 function initSkipToContent(): void {
-  const skipBtn = document.getElementById('SKIP_TO_CONTENT_BTN')
-  const main = document.getElementById('PAGES_CONTAINER')
-  if (skipBtn && main) {
-    skipBtn.addEventListener('click', () => {
-      main.focus()
-      main.scrollIntoView({ behavior: 'smooth' })
-    })
-  }
+  const skip = document.querySelector<HTMLAnchorElement>('.skip-link')
+  const main = document.getElementById('main')
+  if (!skip || !main) return
+  skip.addEventListener('click', (e) => {
+    e.preventDefault()
+    main.focus()
+    main.scrollIntoView({ behavior: 'smooth' })
+  })
 }
 
 const chatRoot = document.getElementById('chat-widget-root')
 if (chatRoot) initChatWidget(chatRoot)
 
+initMobileNav()
 initSmoothScroll()
 initServicesHashScroll()
-initMotionEnter()
 initSkipToContent()
